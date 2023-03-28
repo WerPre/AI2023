@@ -1,1 +1,1 @@
-# AI2023
+# AI2023 labolatorium
