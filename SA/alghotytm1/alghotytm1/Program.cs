@@ -27,17 +27,17 @@ float SA(Func<float, float> f, float a, float b, float s0)
 {
     float s_best = s0;
     float s_current = s0;
-    float T = 0.99f;
-    float Tmin = 0.00001f;
+    float T = 1000;
+    float Tmin = 0.0001f;
     float s_next;
-    float cooling = 0.88f;
+    float cooling = 0.6f;
     Random random= new Random();
 
     while (T > Tmin)
     {
-        for (int i = 0; i < Math.Floor(T); i++)
+        for (int i = 0; i < 100; i++)
         {
-            s_next = randomFromArea(s_current, Math.Abs(a - b) / 1000, a, b);
+            s_next = randomFromArea(s_current, Math.Abs(a - b)/3, a, b);
             float chance = P(f(s_current), f(s_next), T, a, b);
             if (chance == 1 || chance > random.NextDouble()) s_best = s_next;
         }
@@ -46,4 +46,13 @@ float SA(Func<float, float> f, float a, float b, float s0)
 
     return s_best;
 }
+
+
+float f(float s)
+{
+    return s * s;
+}
+
+float result = SA(f, -10, 10, 6);
+Console.WriteLine("Result: " + result);
 

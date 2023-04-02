@@ -1,0 +1,15 @@
+C:\Users\wera2\Documents\github-repos\AIrepo\SA\alghotytm1\alghotytm1\bin\Debug\net6.0\alghotytm1.exe
+C:\Users\wera2\Documents\github-repos\AIrepo\SA\alghotytm1\alghotytm1\bin\Debug\net6.0\alghotytm1.deps.json
+C:\Users\wera2\Documents\github-repos\AIrepo\SA\alghotytm1\alghotytm1\bin\Debug\net6.0\alghotytm1.runtimeconfig.json
+C:\Users\wera2\Documents\github-repos\AIrepo\SA\alghotytm1\alghotytm1\bin\Debug\net6.0\alghotytm1.dll
+C:\Users\wera2\Documents\github-repos\AIrepo\SA\alghotytm1\alghotytm1\bin\Debug\net6.0\alghotytm1.pdb
+C:\Users\wera2\Documents\github-repos\AIrepo\SA\alghotytm1\alghotytm1\obj\Debug\net6.0\alghotytm1.csproj.AssemblyReference.cache
+C:\Users\wera2\Documents\github-repos\AIrepo\SA\alghotytm1\alghotytm1\obj\Debug\net6.0\alghotytm1.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\wera2\Documents\github-repos\AIrepo\SA\alghotytm1\alghotytm1\obj\Debug\net6.0\alghotytm1.AssemblyInfoInputs.cache
+C:\Users\wera2\Documents\github-repos\AIrepo\SA\alghotytm1\alghotytm1\obj\Debug\net6.0\alghotytm1.AssemblyInfo.cs
+C:\Users\wera2\Documents\github-repos\AIrepo\SA\alghotytm1\alghotytm1\obj\Debug\net6.0\alghotytm1.csproj.CoreCompileInputs.cache
+C:\Users\wera2\Documents\github-repos\AIrepo\SA\alghotytm1\alghotytm1\obj\Debug\net6.0\alghotytm1.dll
+C:\Users\wera2\Documents\github-repos\AIrepo\SA\alghotytm1\alghotytm1\obj\Debug\net6.0\refint\alghotytm1.dll
+C:\Users\wera2\Documents\github-repos\AIrepo\SA\alghotytm1\alghotytm1\obj\Debug\net6.0\alghotytm1.pdb
+C:\Users\wera2\Documents\github-repos\AIrepo\SA\alghotytm1\alghotytm1\obj\Debug\net6.0\alghotytm1.genruntimeconfig.cache
+C:\Users\wera2\Documents\github-repos\AIrepo\SA\alghotytm1\alghotytm1\obj\Debug\net6.0\ref\alghotytm1.dll
