@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\wera2\\source\\repos\\alghotytm1\\alghotytm1\\alghotytm1.csproj",
+      "projectUniqueName": "C:\\Users\\wera2\\Documents\\github-repos\\AIrepo\\SA\\alghotytm1\\alghotytm1\\alghotytm1.csproj",
       "projectName": "alghotytm1",
-      "projectPath": "C:\\Users\\wera2\\source\\repos\\alghotytm1\\alghotytm1\\alghotytm1.csproj",
+      "projectPath": "C:\\Users\\wera2\\Documents\\github-repos\\AIrepo\\SA\\alghotytm1\\alghotytm1\\alghotytm1.csproj",
       "packagesPath": "C:\\Users\\wera2\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\wera2\\source\\repos\\alghotytm1\\alghotytm1\\obj\\",
+      "outputPath": "C:\\Users\\wera2\\Documents\\github-repos\\AIrepo\\SA\\alghotytm1\\alghotytm1\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\wera2\\AppData\\Roaming\\NuGet\\NuGet.Config",
