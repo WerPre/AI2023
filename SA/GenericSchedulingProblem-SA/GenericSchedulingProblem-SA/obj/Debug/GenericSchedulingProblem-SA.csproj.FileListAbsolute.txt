@@ -1,0 +1,8 @@
+C:\Users\wera2\Documents\github-repos\AIrepo\SA\GenericSchedulingProblem-SA\GenericSchedulingProblem-SA\obj\Debug\GenericSchedulingProblem-SA.csproj.AssemblyReference.cache
+C:\Users\wera2\Documents\github-repos\AIrepo\SA\GenericSchedulingProblem-SA\GenericSchedulingProblem-SA\obj\Debug\GenericSchedulingProblem-SA.csproj.CoreCompileInputs.cache
+C:\Users\wera2\Documents\github-repos\AIrepo\SA\GenericSchedulingProblem-SA\GenericSchedulingProblem-SA\bin\Debug\GenericSchedulingProblem-SA.exe.config
+C:\Users\wera2\Documents\github-repos\AIrepo\SA\GenericSchedulingProblem-SA\GenericSchedulingProblem-SA\bin\Debug\GenericSchedulingProblem-SA.exe
+C:\Users\wera2\Documents\github-repos\AIrepo\SA\GenericSchedulingProblem-SA\GenericSchedulingProblem-SA\bin\Debug\GenericSchedulingProblem-SA.pdb
+C:\Users\wera2\Documents\github-repos\AIrepo\SA\GenericSchedulingProblem-SA\GenericSchedulingProblem-SA\obj\Debug\GenericSchedulingProblem-SA.exe
+C:\Users\wera2\Documents\github-repos\AIrepo\SA\GenericSchedulingProblem-SA\GenericSchedulingProblem-SA\obj\Debug\GenericSchedulingProblem-SA.pdb
+C:\Users\wera2\Documents\github-repos\AIrepo\SA\GenericSchedulingProblem-SA\GenericSchedulingProblem-SA\obj\Debug\GenericSchedulingProblem-SA.csproj.SuggestedBindingRedirects.cache

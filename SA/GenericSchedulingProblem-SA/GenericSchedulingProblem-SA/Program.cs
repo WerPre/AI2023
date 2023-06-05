@@ -11,12 +11,10 @@ namespace GenericSchedulingProblem_SA
     {
         static void Main(string[] args)
         {
-            int units = 3;
-            List <Dictionary<string, int?>> jobs = new List<Dictionary<string, int?>>();
-            jobs.Add(new Dictionary<string, int?> { { "id", 0 }, { "duration", 5 }, { "dependency", null } } );
-            jobs.Add(new Dictionary<string, int?> { { "id", 1 }, { "duration", 3 }, { "dependency", 0 } });
-            jobs.Add(new Dictionary<string, int?> { { "id", 2 }, { "duration", 2 }, { "dependency", 1 } });
-            scheduling.GenerateNewSchedule(3, units, jobs);
+            int _units = 3;
+            Job[] _jobs = { new Job(0, 2), new Job(1, 34, 0), new Job(2, 12), new Job(3, 11) };
+
+            List<Job>[] _schedule = scheduling.GenerateNewSchedule(_units, _jobs);
         }
     }
 }

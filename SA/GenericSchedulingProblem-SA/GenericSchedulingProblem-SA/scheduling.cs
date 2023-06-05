@@ -8,68 +8,72 @@ namespace GenericSchedulingProblem_SA
 {
     public class scheduling
     {
-        static public int[] GenerateNewSchedule(int num_jobs, int num_units, List<Dictionary<string, int?>> jobs)
+        public static List<Job>[] GenerateNewSchedule(int num_units, Job[] jobs)
         {
-            List<int> units = Enumerable.Range(0, num_units).ToList();
-            int[] schedule = Enumerable.Repeat(-1, num_jobs).ToArray();
+            List<Job>[] schedule = new List<Job>[num_units];
+            List<Job> tempJobs = new List<Job>(jobs);
+            int current_unit;
             Random rand = new Random();
 
-            for (int i = 0; i < num_jobs; i++)
+            for (int i = 0; i < num_units; i++)
             {
-                List<Dictionary<string, int?>> job_dependencies = jobs.Where(j => j["dependency"] == i).ToList();
-                int? latest_unit;
-                if (job_dependencies.Count > 0)
-                {
-                    job_dependencies = job_dependencies.OrderBy(j => schedule[j["id"]]).ToList();
-                    var latest_dependency = job_dependencies.Last();
-                    latest_unit = schedule[latest_dependency["id"]];
-                    units.Remove(latest_unit);
-                }
-                else
-                {
-                    latest_unit = -1;
-                }
-                if (units.Count == 0)
-                {
-                    return null;
-                }
-                int new_unit = units[rand.Next(units.Count)];
-                units.Remove(new_unit);
-                schedule[i] = new_unit;
-                if (latest_unit != -1)
-                {
-                    units.Add(latest_unit);
-                }
+                schedule[i] = new List<Job>();
             }
-            return schedule;
 
+            while (tempJobs.Count() > 0)
+            {
+                current_unit = rand.Next(0, num_units); //tak, może sie zdarzyć, że nie wszystkie unit będą miały jakiekolwiek zadania, ale tym tu sie nie przejmujemy
+                Add_Job_to_Unit(tempJobs[0], current_unit, schedule, tempJobs);
+            }
+
+            return schedule;
         }
 
-        public static int CostFunction(int[] schedule, List<Dictionary<string, int>> jobs)
+        private static void Add_Job_to_Unit(Job job, int unit, List<Job>[] schedule, List<Job> tempJobs)
         {
-            int n = schedule.Length;
-            int[] durations = jobs.Select(j => j["duration"]).ToArray();
-            int[] dependencies = jobs.Select(j => j["dependency"]).ToArray();
-            int total_cost = 0;
-            int[] time_by_unit = new int[new HashSet<int>(schedule).Count];
-            for (int i = 0; i < n; i++)
+            if (job.PrevJob != null)
             {
-                int unit = schedule[i];
-                int time = time_by_unit[unit];
-                if (dependencies[i] != -1)
+                Job prevJob = tempJobs.FirstOrDefault(j => j.Id == job.PrevJob);
+
+                if(prevJob != null)//sprawdzamy, czy juz poprzedniego zadania nie przydzieliliśmy
+                    Add_Job_to_Unit(prevJob, unit, schedule, tempJobs); //poczeka aż jego poprzednicy zostaną przydzieleni do tego unit
+                
+                else //musimy znaleźć unit w juz przydzielonych
                 {
-                    int dep_unit = schedule[dependencies[i]];
-                    int dep_time = time_by_unit[dep_unit] + durations[dependencies[i]];
-                    if (dep_time > time)
+                    foreach(var un in schedule)
                     {
-                        time = dep_time;
+                        prevJob = un.FirstOrDefault(j => j.Id == job.PrevJob);
+                        if (prevJob != null) break;
                     }
+                    unit = prevJob.Unit;
                 }
-                int cost = Math.Abs(time - time_by_unit[unit]) + durations[i];
-                time_by_unit[unit] = time + durations[i];
-                total_cost += cost;
             }
-            return total_cost;
+            job.Unit = unit;
+            schedule[unit].Add(job);
+            tempJobs.Remove(job); //dzieki temu nie wywowały ponownie tej funkcji, tempJobs w foreach powinno dynamicznie sie skracać aż nie będzie miał kolejnych elementów 
+        }
+ 
+
+        public static int CostFunction(List<Job>[] schedule, int num_units)
+        {
+            int total_Time;
+            int[] unit_time_sum = new int[num_units];
+
+            for (int i = 0; i < num_units; i++)
+            {
+                unit_time_sum[i] = 0; //tak w razie czego gdyby miał problem z fatem, że ktoryś procesor nie miałby rzadnych zadań
+
+                //tu zakładamy że czas dla każdego procesora zaczynamy odliczac dla pierwszych zadan od czasu rownego 0, każdy z nich rozpoczyna swoje przydzielone zadania w tym samym czasie
+                //początek wykoania kolejnego zadania na każdym poszczególnym procesorze to czas zakończenia obecnego
+                //dlatego dla każdego procesora czas wykonania wszystkich zadań to suma czasu potrzebnego na wykonaie każdego przydzielonego mu zadania
+                foreach (Job j in schedule[i])
+                {
+                    unit_time_sum[i] += j.Time;
+                }
+            }
+
+            total_Time = unit_time_sum.Max();
+            return total_Time;
         }
     }
 }
