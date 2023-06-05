@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace GenericSchedulingProblem_SA
 {
-    public class scheduling
+    public static class scheduling
     {
         public static List<Job>[] GenerateNewSchedule(int num_units, Job[] jobs)
         {
@@ -52,9 +53,8 @@ namespace GenericSchedulingProblem_SA
             schedule[unit].Add(job);
             tempJobs.Remove(job); //dzieki temu nie wywowały ponownie tej funkcji, tempJobs w foreach powinno dynamicznie sie skracać aż nie będzie miał kolejnych elementów 
         }
- 
 
-        public static int CostFunction(List<Job>[] schedule, int num_units)
+        public static double CostFunction(List<Job>[] schedule, int num_units)
         {
             int total_Time;
             int[] unit_time_sum = new int[num_units];
@@ -74,6 +74,92 @@ namespace GenericSchedulingProblem_SA
 
             total_Time = unit_time_sum.Max();
             return total_Time;
+        }
+
+        public static List<Job>[] NeighbourSchedule(List<Job>[] schedule, Random rand, int num_units)
+        {
+            // kopia starego harmonogramu
+            List<Job>[] newSchedule = (List<Job>[])schedule.Clone();
+
+            Job job1;
+            Job job2;
+            List<Job> unit1 = null;
+            List<Job> unit2 = null;
+            int job1Index = -1;
+            int job2Index = -1;
+
+            // wybór dwóch losowych zadań poptrz wybór dwóch dowolnych unit i 2 losowych indeksów zadań
+            do
+            {
+                job1 = null;
+                job2 = null;
+
+                unit1 = newSchedule[rand.Next(0, num_units)];
+                unit2 = newSchedule[rand.Next(0, num_units)];
+
+                job1Index = rand.Next(0, unit1.Count + 1); // + 1 ponieważ ostatni index oznacza dopisanie zadania na koniec listy, a nie podmianę
+                job2Index = rand.Next(0, unit2.Count + 1);
+
+                if (unit1.Count != 0 && job1Index < unit1.Count) //sprawdzamy czy mamy tu obcje z podmiana, jesli tak, to trzeba go podpiąć pod job
+                    job1 = unit1[job1Index];
+
+                if (unit2.Count != 0 && job2Index < unit2.Count)
+                    job2 = unit2[job2Index];
+            } while (job1 == job2 || unit1 == unit2);// wiedząc ze zależne zadania są tylko na jednym unit, twn warunek zabezpiecza przed zamiana dwóch zadań zależnych od siebie
+
+
+            // robocze listy, zawierające ciąg zadań połączonych relacjami, służą do zamiany zadań lub przeniesienia zadania na inny procesor
+            List<Job> jobs1 = new List<Job>();
+            List<Job> jobs2 = new List<Job>();
+
+            if (job1 != null)
+            {
+                job1Index = unit1.IndexOf(job1);
+
+                // dopisywanie kolejnych zadań połączonych relacjami do roboczej listy i usuwanie ich z listy zadań procesora, bo przenosimy cały ciąg zależnych zadań
+                do
+                {
+                    jobs1.Insert(0, job1);
+                    unit1.Remove(job1);
+                    job1 = unit1.FirstOrDefault(j => j.Id == job1.PrevJob);
+                } while (job1 != null);
+            }
+
+            if (job2 != null)
+            {
+                job2Index = unit2.IndexOf(job2);
+
+                do
+                {
+                    jobs2.Insert(0, job2);
+                    unit2.Remove(job2);
+                    job2 = unit2.FirstOrDefault(j => j.Id == job2.PrevJob);
+                } while (job2 != null);
+            }
+
+
+            // zamiana zadań lub przeniesienie zadania
+            if (jobs2.Count != 0) //nie chemy dodawać zerowych elementów
+            {
+                if (job1Index <= unit1.Count)
+                    unit1.InsertRange(job1Index, jobs2);
+                else unit1.AddRange(jobs2);
+            }
+            if (jobs1.Count != 0)
+            {
+                if (job2Index <= unit2.Count)
+                    unit2.InsertRange(job2Index, jobs1);
+                else unit2.AddRange(jobs1);
+            }
+
+            return newSchedule;
+        }
+
+        private static Job TheFirst(Job job, List<Job> unit) //zakładamy, ze bedziemy stosowac tej funkcji tylko do odnajdowania poprzednika na już uożonym unit
+        {
+            if (job.PrevJob != null)
+                return TheFirst(unit.FirstOrDefault(j => j.Id == job.PrevJob), unit);
+            return job;
         }
     }
 }
