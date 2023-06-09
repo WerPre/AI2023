@@ -6,3 +6,5 @@ C:\Users\wera2\Documents\github-repos\AIrepo\SA\GenericSchedulingProblem-SA\Gene
 C:\Users\wera2\Documents\github-repos\AIrepo\SA\GenericSchedulingProblem-SA\GenericSchedulingProblem-SA\obj\Debug\GenericSchedulingProblem-SA.exe
 C:\Users\wera2\Documents\github-repos\AIrepo\SA\GenericSchedulingProblem-SA\GenericSchedulingProblem-SA\obj\Debug\GenericSchedulingProblem-SA.pdb
 C:\Users\wera2\Documents\github-repos\AIrepo\SA\GenericSchedulingProblem-SA\GenericSchedulingProblem-SA\obj\Debug\GenericSchedulingProblem-SA.csproj.SuggestedBindingRedirects.cache
+C:\Users\wera2\Documents\github-repos\AIrepo\SA\GenericSchedulingProblem-SA\GenericSchedulingProblem-SA\bin\Debug\GAF.47.dll
+C:\Users\wera2\Documents\github-repos\AIrepo\SA\GenericSchedulingProblem-SA\GenericSchedulingProblem-SA\obj\Debug\GenericSchedulingProblem-SA.csproj.CopyComplete
