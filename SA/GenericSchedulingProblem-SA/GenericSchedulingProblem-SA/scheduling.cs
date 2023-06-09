@@ -87,8 +87,6 @@ namespace GenericSchedulingProblem_SA
             List<Job> unit2 = null;
             int job1Index = -1;
             int job2Index = -1;
-            int unit1_num = -1;
-            int unit2_num = -1;
 
             // wybór dwóch losowych zadań poptrz wybór dwóch dowolnych unit i 2 losowych indeksów zadań
             do
@@ -96,11 +94,8 @@ namespace GenericSchedulingProblem_SA
                 job1 = null;
                 job2 = null;
 
-                unit1_num = rand.Next(0, num_units);
-                unit2_num = rand.Next(0, num_units);
-
-                unit1 = newSchedule[unit1_num];
-                unit2 = newSchedule[unit2_num];
+                unit1 = newSchedule[rand.Next(0, num_units)];
+                unit2 = newSchedule[rand.Next(0, num_units)];
 
                 job1Index = rand.Next(0, unit1.Count + 1); // + 1 ponieważ ostatni index oznacza dopisanie zadania na koniec listy, a nie podmianę
                 job2Index = rand.Next(0, unit2.Count + 1);
@@ -119,29 +114,26 @@ namespace GenericSchedulingProblem_SA
 
             if (job1 != null)
             {
-                job1 = TheFirst(job1, unit1);
                 job1Index = unit1.IndexOf(job1);
 
                 // dopisywanie kolejnych zadań połączonych relacjami do roboczej listy i usuwanie ich z listy zadań procesora, bo przenosimy cały ciąg zależnych zadań
                 do
                 {
-                    jobs1.Add(job1);
+                    jobs1.Insert(0, job1);
                     unit1.Remove(job1);
-                    job1 = unit1.FirstOrDefault(j => j.PrevJob == job1.Id);
+                    job1 = unit1.FirstOrDefault(j => j.Id == job1.PrevJob);
                 } while (job1 != null);
-
             }
 
             if (job2 != null)
             {
-                job2 = TheFirst(job2, unit2);
                 job2Index = unit2.IndexOf(job2);
 
                 do
                 {
-                    jobs2.Add(job2);
+                    jobs2.Insert(0, job2);
                     unit2.Remove(job2);
-                    job2 = unit2.FirstOrDefault(j => j.PrevJob == job2.Id);
+                    job2 = unit2.FirstOrDefault(j => j.Id == job2.PrevJob);
                 } while (job2 != null);
             }
 
@@ -149,27 +141,12 @@ namespace GenericSchedulingProblem_SA
             // zamiana zadań lub przeniesienie zadania
             if (jobs2.Count != 0) //nie chemy dodawać zerowych elementów
             {
-                foreach (Job job in jobs2)
-                {
-                    job.Unit = unit1_num;
-                    //Console.WriteLine("unit: " + job.Unit.ToString() + " Id: " + job.Id.ToString());
-                }
-                //Console.WriteLine();
-
                 if (job1Index <= unit1.Count)
                     unit1.InsertRange(job1Index, jobs2);
                 else unit1.AddRange(jobs2);
             }
             if (jobs1.Count != 0)
             {
-                foreach (Job job in jobs1)
-                {
-                    job.Unit = unit2_num;
-                    //Console.WriteLine("unit: " + job.Unit.ToString() + " Id: " + job.Id.ToString());
-                    
-                }
-                //Console.WriteLine();
-
                 if (job2Index <= unit2.Count)
                     unit2.InsertRange(job2Index, jobs1);
                 else unit2.AddRange(jobs1);

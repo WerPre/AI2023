@@ -1,6 +1,0 @@
-C:\Users\wera2\Documents\github-repos\AIrepo\SA\GenericSchedulingProblem-SA\GenericSchedulingProblem-SA\bin\Debug\GAF.47.dll
-C:\Users\wera2\Documents\github-repos\AIrepo\SA\GenericSchedulingProblem-SA\GenericSchedulingProblem-SA\bin\Debug\GAF.47.pdb
-C:\Users\wera2\Documents\github-repos\AIrepo\SA\GenericSchedulingProblem-SA\GenericSchedulingProblem-SA\obj\Debug\GAF.47.csproj.AssemblyReference.cache
-C:\Users\wera2\Documents\github-repos\AIrepo\SA\GenericSchedulingProblem-SA\GenericSchedulingProblem-SA\obj\Debug\GAF.47.csproj.CoreCompileInputs.cache
-C:\Users\wera2\Documents\github-repos\AIrepo\SA\GenericSchedulingProblem-SA\GenericSchedulingProblem-SA\obj\Debug\GAF.47.dll
-C:\Users\wera2\Documents\github-repos\AIrepo\SA\GenericSchedulingProblem-SA\GenericSchedulingProblem-SA\obj\Debug\GAF.47.pdb
