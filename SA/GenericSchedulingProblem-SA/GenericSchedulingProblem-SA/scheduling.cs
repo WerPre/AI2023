@@ -81,6 +81,11 @@ namespace GenericSchedulingProblem_SA
             // kopia starego harmonogramu
             List<Job>[] newSchedule = (List<Job>[])schedule.Clone();
 
+            for (int i = 0; i < num_units; i++)
+            {
+                newSchedule[i] = (List<Job>)schedule[i].Clone();
+            }
+
             Job job1;
             Job job2;
             List<Job> unit1 = null;

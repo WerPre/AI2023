@@ -7,6 +7,13 @@ using System.Threading.Tasks;
 
 namespace GenericSchedulingProblem_SA
 {
+    static class Extensions
+    {
+        public static IList<T> Clone<T>(this IList<T> listToClone) where T : ICloneable
+        {
+            return listToClone.Select(item => (T)item.Clone()).ToList();
+        }
+    }
     internal class Program
     {
         static void Main(string[] args)
@@ -18,8 +25,8 @@ namespace GenericSchedulingProblem_SA
             
             Console.WriteLine(scheduling.CostFunction(_schedule, _units));
 
-            List<Job>[] SA_schedule = SimulatedAnneling.SA_schedule(scheduling.CostFunction, _units, _schedule, (Job[])_jobs.Clone());
-            Genetic genetic_schedule = new Genetic((Job[])_jobs.Clone(), _units);
+            List<Job>[] SA_schedule = SimulatedAnneling.SA_schedule(scheduling.CostFunction, _units, _schedule);
+            Genetic genetic_schedule = new Genetic(_jobs, _units);
             Console.WriteLine(scheduling.CostFunction(SA_schedule, _units));
             Console.WriteLine(scheduling.CostFunction(genetic_schedule.FindBestSchedule(), _units));
 

@@ -18,14 +18,12 @@ namespace GenericSchedulingProblem_SA
         public Genetic(Job[] jobs, int num_units)
         {
             this.num_units = num_units;
-            units = scheduling.GenerateNewSchedule(num_units, jobs);
+            units = scheduling.GenerateNewSchedule(num_units, (Job[])jobs.Clone());
         }
 
         public List<Job>[] FindBestSchedule()
         {
             Population population = new Population();
-
-            List<Job> populationJobs = new List<Job>();
 
             int i = 0;
 
@@ -35,7 +33,7 @@ namespace GenericSchedulingProblem_SA
                 var chromosome = new Chromosome();
                 foreach (var unit in units)
                 {
-                    chromosome.Genes.Add(new Gene(unit));
+                    chromosome.Genes.Add(new Gene((List<Job>)unit.Clone()));
                 }
 
                 chromosome.Genes.ShuffleFast();
@@ -48,7 +46,8 @@ namespace GenericSchedulingProblem_SA
             //create the crossover operator
             var crossover = new Crossover(0.8)
             {
-                CrossoverType = CrossoverType.DoublePointOrdered
+                CrossoverType = CrossoverType.DoublePointOrdered,
+                ReplacementMethod= ReplacementMethod.GenerationalReplacement
             };
 
             //create the mutation operator
@@ -73,7 +72,7 @@ namespace GenericSchedulingProblem_SA
             i = 0;
             foreach (var gene in best.Genes)
             {
-                temp_schedule[i] = (List<Job>)gene.ObjectValue;
+                temp_schedule[i] = (List<Job>)((List<Job>)gene.ObjectValue).Clone();
                 i++;
             }
 
@@ -99,7 +98,7 @@ namespace GenericSchedulingProblem_SA
             int i = 0;
             foreach (var gene in chromosome.Genes)
             {
-                temp_schedule[i] = (List<Job>)gene.ObjectValue;
+                temp_schedule[i] = (List<Job>)((List<Job>)gene.ObjectValue).Clone();
                 i++;
             }
 
@@ -118,7 +117,8 @@ namespace GenericSchedulingProblem_SA
                     if(job.PrevJob != null)
                     {
                         Job prevJob = unit.FirstOrDefault(j => j.Id == job.PrevJob);
-                        if(prevJob == null) return false;
+                        if (prevJob == null) return false;
+                        if (unit.IndexOf(prevJob) > unit.IndexOf(job)) return false;
                     }                 
                 }
             }

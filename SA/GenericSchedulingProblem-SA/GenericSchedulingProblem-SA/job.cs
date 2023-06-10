@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GenericSchedulingProblem_SA
 {
-    public class Job
+    public class Job : ICloneable
     {
         public int Id { get; set; }
         public int Time { get; set; }
@@ -19,6 +19,11 @@ namespace GenericSchedulingProblem_SA
             Id = id;
             Time = time;
             PrevJob = prevJob;
+        }
+
+        Object ICloneable.Clone()
+        {
+            return new Job(Id, Time, PrevJob);
         }
     }
 }
