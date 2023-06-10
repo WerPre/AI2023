@@ -17,7 +17,7 @@ namespace GenericSchedulingProblem_SA
             else return (double)Math.Exp(-delta / T);
         }
 
-        public static List<Job>[] SA_schedule(Func<List<Job>[], int, double> f, int num_units, List<Job>[] s0)
+        public static List<Job>[] SA_schedule(Func<List<Job>[], int, double> f, int num_units, List<Job>[] s0, Job[] jobs)
         {
             List<Job>[] s_best = s0;
             double T = 100;
@@ -30,7 +30,8 @@ namespace GenericSchedulingProblem_SA
             {
                 for (int i = 0; i <= 100; i++)
                 {
-                    s_next = scheduling.NeighbourSchedule(s_best, random, num_units);
+                    //s_next = scheduling.NeighbourSchedule(s_best, random, num_units);
+                    s_next = scheduling.GenerateNewSchedule(num_units, jobs);
                     double chance = P(f(s_best, num_units), f(s_next, num_units), T);
                     if (chance == 1 || chance > random.NextDouble()) s_best = s_next;
                 }

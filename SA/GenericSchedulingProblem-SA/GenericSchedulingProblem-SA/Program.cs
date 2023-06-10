@@ -18,7 +18,7 @@ namespace GenericSchedulingProblem_SA
             
             Console.WriteLine(scheduling.CostFunction(_schedule, _units));
 
-            List<Job>[] SA_schedule = SimulatedAnneling.SA_schedule(scheduling.CostFunction, _units, _schedule);
+            List<Job>[] SA_schedule = SimulatedAnneling.SA_schedule(scheduling.CostFunction, _units, _schedule, (Job[])_jobs.Clone());
             Genetic genetic_schedule = new Genetic((Job[])_jobs.Clone(), _units);
             Console.WriteLine(scheduling.CostFunction(SA_schedule, _units));
             Console.WriteLine(scheduling.CostFunction(genetic_schedule.FindBestSchedule(), _units));
