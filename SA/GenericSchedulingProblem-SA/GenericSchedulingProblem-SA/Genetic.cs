@@ -6,34 +6,73 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using GAF.Extensions;
+using System.CodeDom;
 
 namespace GenericSchedulingProblem_SA
 {
+    public class ZipJob : Job
+    {
+        public List<Job> Jobs { get; set; }
+
+        public ZipJob(int id, int time, int? prevJob = null, List<Job> jobs = null) : base(id, time, prevJob)
+        {
+            Id = (-1) * id - 1; //Id Zipa zawsze będą ujemne
+            Jobs = jobs;
+            Time = jobs.Sum(j => j.Time);
+        }
+
+        public List<Job> Rezip() 
+        {
+            return Jobs;
+        }
+
+    }
     public class Genetic
     {
         private const int PopulationSize = 100;
-        private List<Job>[] units;
+        private List<Job> Jobs;
         private int num_units;
 
         public Genetic(Job[] jobs, int num_units)
         {
             this.num_units = num_units;
-            units = scheduling.GenerateNewSchedule(num_units, (Job[])jobs.Clone());
+            this.Jobs = new List<Job>(jobs);
         }
 
         public List<Job>[] FindBestSchedule()
         {
             Population population = new Population();
 
-            int i = 0;
+            List<Job> workJobs = new List<Job>();
+
+            //będziemy pracować tylko na niezależnych zadań poprzez zamienianie zależnych na jeden zkomresowany
+            foreach(Job job in Jobs)
+            {
+                Job nextJob = Jobs.FirstOrDefault(j => j.PrevJob == job.Id);
+                if (nextJob != null) //sprawdzamy czy jest od niego zależny inny
+                {
+                    List<Job> relatedJobs = new List<Job> { job };
+                    do
+                    {
+                        //relatedJobs.Add(nextJob.Clone());
+                        relatedJobs.Add(nextJob);
+                        nextJob = Jobs.FirstOrDefault(j => j.PrevJob == nextJob.Id);
+                    } while (nextJob != null); //zakładamy, ze jedno zadanie moze miec tylko jedno zadanie wymagające bezpośrednio jego zakończenia
+
+                    //tworzymy i dodajemy zkomresowany Job
+                    workJobs.Add(new ZipJob(job.Id, 0, jobs: relatedJobs));//Time tak czy siak zostanie nadpisany przez kreatora na podstawie listy zadań
+                }
+                else
+                    workJobs.Add(job);
+            }
 
             //create the chromosomes
-            for (; i < PopulationSize; i++)
+            for (int i = 0; i < PopulationSize; i++)
             {
                 var chromosome = new Chromosome();
-                foreach (var unit in units)
+                foreach (Job job in workJobs)
                 {
-                    chromosome.Genes.Add(new Gene((List<Job>)unit.Clone()));
+                    chromosome.Genes.Add(new Gene(job));
                 }
 
                 chromosome.Genes.ShuffleFast();
@@ -67,22 +106,13 @@ namespace GenericSchedulingProblem_SA
 
             var best = ga.Population.GetTop(1)[0];
 
-            List<Job>[] temp_schedule = new List<Job>[num_units];
-
-            i = 0;
-            foreach (var gene in best.Genes)
-            {
-                temp_schedule[i] = (List<Job>)((List<Job>)gene.ObjectValue).Clone();
-                i++;
-            }
-
+            List<Job>[] temp_schedule = JobsToSchedule(best);
+          
             return temp_schedule;
         }
 
         public double CalculateFitness(Chromosome chromosome)
         {
-            if (CheckGeneratedSchedule(chromosome)) return 0.0; //jesli nie został poprawnie wygenerowany, to fitness = 0;
-
             var timeCost = CostFunction_genetic(chromosome);
 
             var fitness = 10 / timeCost;
@@ -93,37 +123,37 @@ namespace GenericSchedulingProblem_SA
         // składanie genow/unitów w hormonogram i liczymy koszt
         private double CostFunction_genetic(Chromosome chromosome)
         {
-            List<Job>[] temp_schedule = new List<Job>[num_units];
-
-            int i = 0;
-            foreach (var gene in chromosome.Genes)
-            {
-                temp_schedule[i] = (List<Job>)((List<Job>)gene.ObjectValue).Clone();
-                i++;
-            }
+            List<Job>[] temp_schedule = JobsToSchedule(chromosome);
 
             return scheduling.CostFunction(temp_schedule, num_units);
         }
 
-        bool CheckGeneratedSchedule(Chromosome chromosome) //upewniamy się czy wygenerowany hormonogram jest poprawny
+        List<Job>[] JobsToSchedule(Chromosome chromosome) //upewniamy się czy wygenerowany hormonogram jest poprawny
         {
-            List<Job> unit = new List<Job>();
+            List<Job>[] newSchedule = new List<Job>[num_units];
+            for(int i = 0; i < num_units; i++)
+            {
+                newSchedule[i] = new List<Job>();
+            }
 
             foreach (var gene in chromosome.Genes)
             {
-                unit = (List<Job>)gene.ObjectValue;
-                foreach(Job job in unit)
-                {
-                    if(job.PrevJob != null)
-                    {
-                        Job prevJob = unit.FirstOrDefault(j => j.Id == job.PrevJob);
-                        if (prevJob == null) return false;
-                        if (unit.IndexOf(prevJob) > unit.IndexOf(job)) return false;
-                    }                 
-                }
-            }
+                var minUnit = newSchedule.FirstOrDefault(unit => unit.Count == 0);
+                if(minUnit == null)//jesli nie ma zadnego pustego unit
+                    minUnit = newSchedule.FirstOrDefault(unit => unit.Sum(j => j.Time) == newSchedule.Min(u => u.Sum(j => j.Time)));
 
-            return true;
+                Job job = (Job)gene.ObjectValue;
+
+                if (job.Id < 0)
+                {
+                    ZipJob zipJob = ((ZipJob)job);
+                    List<Job> relatedJobs = zipJob.Rezip();
+                    minUnit.AddRange(relatedJobs);
+                }
+                else
+                    minUnit.Add(job);
+            }
+            return newSchedule;
         }
 
         public static bool Terminate(Population population, int currentGeneration, long currentEvaluation)

@@ -21,7 +21,12 @@ namespace GenericSchedulingProblem_SA
             PrevJob = prevJob;
         }
 
-        Object ICloneable.Clone()
+        Object ICloneable.Clone() //w razie czego również to zaimplementuje
+        {
+            return new Job(Id, Time, PrevJob);
+        }
+
+        internal Job Clone() //pomimo implementacji tego powyżej musiałam również zdefiniować zwracające Job
         {
             return new Job(Id, Time, PrevJob);
         }

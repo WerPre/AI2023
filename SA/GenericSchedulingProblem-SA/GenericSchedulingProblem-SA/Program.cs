@@ -19,6 +19,7 @@ namespace GenericSchedulingProblem_SA
         static void Main(string[] args)
         {
             int _units = 3;
+            //zakładamy, ze jedno zadanie moze miec tylko jedno zadanie wymagające bezpośrednio jego zakończenia
             Job[] _jobs = { new Job(0, 20), new Job(1, 30, 0), new Job(2, 12), new Job(3, 11) };
             
             List<Job>[] _schedule = scheduling.GenerateNewSchedule(_units, _jobs);
