@@ -46,8 +46,9 @@ namespace GenericSchedulingProblem_SA
             List<Job> workJobs = new List<Job>();
 
             //będziemy pracować tylko na niezależnych zadań poprzez zamienianie zależnych na jeden zkomresowany
-            foreach(Job job in Jobs)
+            while(Jobs.Count != 0)
             {
+                Job job = Jobs[0];
                 Job nextJob = Jobs.FirstOrDefault(j => j.PrevJob == job.Id);
                 if (nextJob != null) //sprawdzamy czy jest od niego zależny inny
                 {
@@ -56,6 +57,7 @@ namespace GenericSchedulingProblem_SA
                     {
                         //relatedJobs.Add(nextJob.Clone());
                         relatedJobs.Add(nextJob);
+                        Jobs.Remove(nextJob);
                         nextJob = Jobs.FirstOrDefault(j => j.PrevJob == nextJob.Id);
                     } while (nextJob != null); //zakładamy, ze jedno zadanie moze miec tylko jedno zadanie wymagające bezpośrednio jego zakończenia
 
@@ -64,6 +66,7 @@ namespace GenericSchedulingProblem_SA
                 }
                 else
                     workJobs.Add(job);
+                Jobs.Remove(job);
             }
 
             //create the chromosomes
